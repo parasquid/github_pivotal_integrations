@@ -1,4 +1,5 @@
 # GithubPivotalIntegrations
+A set of github and pivotal tracker integrations to make working with the two services a lot easier
 
 TODO: Write a gem description
 
