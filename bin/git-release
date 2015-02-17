@@ -2,6 +2,15 @@
 require 'octokit'
 require 'commander/import'
 require 'pry'
+require 'dotenv'
+Dotenv.load
+
+stack = Faraday::RackBuilder.new do |builder|
+  builder.response :logger
+  builder.use Octokit::Response::RaiseError
+  builder.adapter Faraday.default_adapter
+end
+Octokit.middleware = stack
 
 def oauth_client(username, password)
   # Octokit::Client.new(:access_token => ENV['github_access_token'])
@@ -25,7 +34,5 @@ Commander.configure do
   @client = oauth_client(username, password)
   puts @client.user.login
 
-  release = @client.user.create_release repo, tag, name: name
-
-  puts release.inspect
+  # release = @client.create_release repo, tag, name: name
 end
