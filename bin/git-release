@@ -1,2 +1,31 @@
 #!/usr/bin/env ruby
-puts 'git-release was run!'
+require 'octokit'
+require 'commander/import'
+require 'pry'
+
+def oauth_client(username, password)
+  # Octokit::Client.new(:access_token => ENV['github_access_token'])
+  Octokit::Client.new(login: username, password: password)
+end
+
+Commander.configure do
+  program :name, 'git-release'
+  program :version, '1.0.0'
+  program :description, 'creates a github release'
+
+  username = ask 'Github username:'
+  password = password 'Github password:'
+  puts username
+  puts password
+
+  repo = ENV['github_repo']
+  tag = "test-create-release-tag"
+  name = "Test Create Release"
+
+  @client = oauth_client(username, password)
+  puts @client.user.login
+
+  release = @client.user.create_release repo, tag, name: name
+
+  puts release.inspect
+end
